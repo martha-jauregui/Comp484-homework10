@@ -1,11 +1,28 @@
+// --- Message Logging Examples (Global/Initial) ---
+console.info("Giga Pet App initialized successfully."); // Log Info
+console.log("%c MOCHI STATUS UPDATED ", "color: white; background: #4CAF50; font-weight: bold;"); // Log Custom
+window.addEventListener('touchstart', function() {}, {passive: false});
+
 $(function() { 
     // Requirement: Initialize the pet's information in the HTML
     checkAndUpdatePetInfoInHtml("Welcome! I'm ready to hang out!");
   
+    // Log Group: Cluster your initial setup logs
+    console.group("Initial Setup");
+    console.log("Checking buttons...");
+    console.log("Checking audio...");
+    console.groupEnd(); // Log Group
+
+    
     $('.treat-button').click(clickedTreatButton);
     $('.play-button').click(clickedPlayButton);
     $('.exercise-button').click(clickedExerciseButton);
     $('.nap-button').click(clickedNapButton);
+
+    // Cause 404 Network Error (For assignment screenshot)
+    let errorImg = new Image();
+    errorImg.src = "images/missing-asset.png";
+
 });
 
 // Requirement: Create pet_info object with name, weight, and happiness
@@ -18,6 +35,10 @@ function clickedTreatButton() {
     // Requirement: Add to happiness and weight 
     pet_info.happiness += 5;
     pet_info.weight += 2;
+
+    // Log Table: Show pet stats in a grid every time they get a treat
+    console.table(pet_info);
+
     checkAndUpdatePetInfoInHtml("Yum! That treat was delicious!");
 }
 
@@ -51,11 +72,27 @@ function checkAndUpdatePetInfoInHtml(comment) {
 
 function checkWeightAndHappinessBeforeUpdating() {
     // Requirement: Fix bugs so values can't go below zero 
+   // Log Warning: If weight gets too low
+    if (pet_info.weight < 5) {
+        console.warn("Warning: Mochi's weight is very low!"); // Log Warning
+    }
+   
     if (pet_info.weight < 0) {
         pet_info.weight = 0;
+        console.error("Error: Weight attempted to go below zero!"); // Log Error
     }
+
     if (pet_info.happiness < 0) {
         pet_info.happiness = 0;
+    }
+
+    // Cause TypeError: Trying to call a non-existent function
+    try {
+        if (pet_info.happiness > 100) {
+            pet_info.doMagicDance(); // This will cause a TypeError
+        }
+    } catch (e) {
+        console.error("Caught a expected TypeError as required:", e);
     }
 }
 
